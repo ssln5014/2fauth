@@ -53,25 +53,6 @@ services:
     networks:
       - jumpserver
 
-  koko:
-    image: wojiushixiaobai/jms_koko:${Version}
-    container_name: jms_koko
-    restart: always
-    tty: true
-    environment:
-      CORE_HOST: http://core:8080
-      BOOTSTRAP_TOKEN: $BOOTSTRAP_TOKEN
-    depends_on:
-      - core
-      - mysql
-      - redis
-    volumes:
-      - koko-keys:/opt/koko/data/keys
-    ports:
-      - 2222:2222
-    networks:
-      - jumpserver
-
   guacamole:
     image: wojiushixiaobai/jms_guacamole:${Version}
     container_name: jms_guacamole
@@ -93,24 +74,6 @@ services:
     networks:
       - jumpserver
 
-  nginx:
-    image: wojiushixiaobai/jms_nginx:${Version}
-    container_name: jms_nginx
-    restart: always
-    tty: true
-    depends_on:
-      - core
-      - koko
-      - mysql
-      - redis
-    volumes:
-      - static:/opt/jumpserver/data/static
-      - media:/opt/jumpserver/data/media
-    ports:
-      - 80:80
-    networks:
-      - jumpserver
-
 volumes:
   static:
     driver_opts:
@@ -122,9 +85,6 @@ volumes:
       driver_opts:
       size: 0.5Gi
   redis-data:
-    driver_opts:
-      size: 0.5Gi
-  koko-keys:
     driver_opts:
       size: 0.5Gi
   guacamole-keys:
