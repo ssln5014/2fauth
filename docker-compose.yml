@@ -113,11 +113,23 @@ services:
 
 volumes:
   static:
+    driver_opts:
+      size: 0.5Gi
   media:
+    driver_opts:
+      size: 0.5Gi
   mysql-data:
+      driver_opts:
+      size: 0.5Gi
   redis-data:
+    driver_opts:
+      size: 0.5Gi
   koko-keys:
+    driver_opts:
+      size: 0.5Gi
   guacamole-keys:
+    driver_opts:
+      size: 0.5Gi
 
 networks:
   jumpserver:
