@@ -1,95 +1,14 @@
 version: '3'
 services:
-  mysql:
-    image: wojiushixiaobai/jms_mysql:${Version}
-    container_name: jms_mysql
-    restart: always
-    tty: true
+  gpt_academic_nolocalllms:
+    image: ghcr.io/binary-husky/gpt_academic_nolocal:master
     environment:
-      DB_PORT: $DB_PORT
-      DB_USER: $DB_USER
-      DB_PASSWORD: $DB_PASSWORD
-      DB_NAME: $DB_NAME
-    volumes:
-      - mysql-data:/var/lib/mysql
-    networks:
-      - jumpserver
-
-  redis:
-    image: wojiushixiaobai/jms_redis:${Version}
-    container_name: jms_redis
-    restart: always
-    tty: true
-    environment:
-      REDIS_PORT: $REDIS_PORT
-      REDIS_PASSWORD: $REDIS_PASSWORD
-    volumes:
-      - redis-data:/var/lib/redis/
-    networks:
-      - jumpserver
-
-  core:
-    image: wojiushixiaobai/jms_core:${Version}
-    container_name: jms_core
-    restart: always
-    tty: true
-    environment:
-      SECRET_KEY: $SECRET_KEY
-      BOOTSTRAP_TOKEN: $BOOTSTRAP_TOKEN
-      DB_HOST: $DB_HOST
-      DB_PORT: $DB_PORT
-      DB_USER: $DB_USER
-      DB_PASSWORD: $DB_PASSWORD
-      DB_NAME: $DB_NAME
-      REDIS_HOST: $REDIS_HOST
-      REDIS_PORT: $REDIS_PORT
-      REDIS_PASSWORD: $REDIS_PASSWORD
-    depends_on:
-      - mysql
-      - redis
-    volumes:
-      - static:/opt/jumpserver/data/static
-      - media:/opt/jumpserver/data/media
-    networks:
-      - jumpserver
-
-  guacamole:
-    image: wojiushixiaobai/jms_guacamole:${Version}
-    container_name: jms_guacamole
-    restart: always
-    tty: true
-    environment:
-      JUMPSERVER_SERVER: http://core:8080
-      BOOTSTRAP_TOKEN: $BOOTSTRAP_TOKEN
-      JUMPSERVER_KEY_DIR: /config/guacamole/keys
-      GUACAMOLE_HOME: /config/guacamole
-      GUACAMOLE_LOG_LEVEL: ERROR
-      JUMPSERVER_ENABLE_DRIVE: 'true'
-    depends_on:
-      - core
-      - mysql
-      - redis
-    volumes:
-      - guacamole-keys:/config/guacamole/keys
-    networks:
-      - jumpserver
-
-volumes:
-  static:
-    driver_opts:
-      size: 0.5Gi
-  media:
-    driver_opts:
-      size: 0.5Gi
-  mysql-data:
-      driver_opts:
-      size: 0.5Gi
-  redis-data:
-    driver_opts:
-      size: 0.5Gi
-  guacamole-keys:
-    driver_opts:
-      size: 0.5Gi
-
-networks:
-  jumpserver:
+      - API_KEY=sk-pz4NgxsmsWz7dwjTwsCttQ3rsGRC5dlLf7IhtTg80CDhUzn6
+      - USE_PROXY=False
+      - LLM_MODEL=gpt-3.5-turbo
+      - AVAIL_LLM_MODELS=["gpt-3.5-turbo", "api2d-gpt-3.5-turbo", "gpt-4", "api2d-gpt-4", "sparkv2", "qianfan"]
+      - WEB_PORT=22303
+      - API_URL_REDIRECT={"https://api.openai.com/v1/chat/completions": "https://api.chatanywhere.com.cn/v1/chat/completions"}
+    network_mode: "host"
+    command: >
+      bash -c "pip install --upgrade nougat-ocr tiktoken && python3 -u main.py"
