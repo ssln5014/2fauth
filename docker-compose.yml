@@ -6,9 +6,8 @@ services:
       - API_KEY=sk-pz4NgxsmsWz7dwjTwsCttQ3rsGRC5dlLf7IhtTg80CDhUzn6
       - USE_PROXY=False
       - LLM_MODEL=gpt-3.5-turbo
-      - AVAIL_LLM_MODELS=["gpt-3.5-turbo", "api2d-gpt-3.5-turbo", "gpt-4", "api2d-gpt-4", "sparkv2", "qianfan"]
+      - AVAIL_LLM_MODELS=["gpt-3.5-turbo"]
       - WEB_PORT=8888
-      - API_URL_REDIRECT={"https://api.openai.com/v1/chat/completions": "https://api.chatanywhere.com.cn/v1/chat/completions"}
-    network_mode: "host"
+      - API_URL_REDIRECT={"https://api.openai.com/v1/chat/completions":"https://api.chatanywhere.com.cn/v1/chat/completions"}
     command: >
       bash -c "pip install --upgrade nougat-ocr tiktoken && python3 -u main.py"
